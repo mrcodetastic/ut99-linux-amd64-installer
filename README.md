@@ -1,4 +1,4 @@
-## Unreal Tournament 1999 Game of The Year - Linux Installer
+## Unreal Tournament 1999 Game of The Year - Linux Installer (in one command)
 Get fragging quickly without the pain.
 
 It will download the original 1999 iso file from archive.org and apply the latest patch from OldUnreal.
