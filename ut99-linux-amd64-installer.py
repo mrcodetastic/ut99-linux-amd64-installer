@@ -36,6 +36,7 @@ import hashlib
 import random
 import string
 import glob
+import stat
 
 # Define the base URL for all downloads (only defined once)
 SERVER_ISO_BASE_URL = "https://archive.org/download/ut-goty/"
@@ -125,6 +126,16 @@ def process_uz_files(base_dir, system64_dir):
     This is good enough.
     
     """
+    ucc_path = os.path.join(system64_dir, "ucc-bin-amd64")
+    ucc_stat = os.stat(ucc_path)
+    if ucc_stat.st_mode & (stat.S_IXUSR | stat.S_IXOTH | stat.S_IXGRP) == 0:
+        print("ucc executeable not set to executable, attempting to fix.")
+        try:
+            os.chmod(ucc_path,
+                ucc_stat.st_mode | stat.S_IXUSR | stat.S_IXOTH | stat.S_IXGRP)
+        except OSError as e:
+            print(f"Failed to set executable bit on {ucc_path} - {e}")
+            return
     maps_dir = os.path.join(base_dir, "Maps")
     if not os.path.exists(maps_dir):
         log("Maps directory not found in the unpacked ISO. Skipping .uz file processing.")
@@ -146,7 +157,6 @@ def process_uz_files(base_dir, system64_dir):
     
             
         # Build and run the decompress command using ucc-bin-amd64 from system64_dir.
-        ucc_path = os.path.join(system64_dir, "ucc-bin-amd64")
         cmd = f'"{ucc_path}" decompress "{uz}"'
         if run_cmd(cmd) != 0:
             log(f"Error decompressing {uz}")
