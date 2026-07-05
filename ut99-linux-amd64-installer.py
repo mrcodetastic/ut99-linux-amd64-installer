@@ -126,6 +126,10 @@ def process_uz_files(base_dir, system64_dir):
     This is good enough.
     
     """
+    #Fix for: https://github.com/OldUnreal/FullGameInstallers/issues/50
+
+    ipdrv_so = os.path.join(system64_dir, "IpDrv.so")
+
     ucc_path = os.path.join(system64_dir, "ucc-bin-amd64")
     ucc_stat = os.stat(ucc_path)
     if ucc_stat.st_mode & (stat.S_IXUSR | stat.S_IXOTH | stat.S_IXGRP) == 0:
@@ -154,7 +158,12 @@ def process_uz_files(base_dir, system64_dir):
         log(f"Processing {filename} (file {index} of {total})")
 
         # Build and run the decompress command using ucc-bin-amd64 from system64_dir.
-        cmd = f'"{ucc_path}" decompress "{uz}"'
+        #cmd = f'"{ucc_path}" decompress "{uz}"'
+        cmd = (
+                f'LD_PRELOAD="{ipdrv_so}" '
+          #      f'LD_LIBRARY_PATH="{system64_dir}:$LD_LIBRARY_PATH"',
+                f'"{ucc_path}" decompress "{uz}" '
+        )
         if run_cmd(cmd) != 0:
             log(f"Error decompressing {uz}")
             continue
