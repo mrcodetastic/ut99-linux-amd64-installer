@@ -274,9 +274,10 @@ def main():
     # We assume the main executable is at: ~/UnrealTournament/System64/ut-bin-amd64
     exec_path = os.path.join(base_dir, "System64", "ut-bin-amd64")
     icon_path = os.path.join(base_dir, "Help", "Unreal.ico")
+    sdldrv_so = os.path.join(base_dir, "System64", "SDLDrv.so")
     desktop_entry = f"""[Desktop Entry]
 Name=Unreal Tournament
-Exec={exec_path}
+Exec=LD_PRELOAD='{sdldrv_so}' '{exec_path}'
 Icon={icon_path}
 Type=Application
 Terminal=false
