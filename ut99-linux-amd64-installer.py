@@ -149,7 +149,6 @@ def process_uz_files(base_dir, system64_dir):
         return
     
     log("Unpacking game files from .uz files...")
-    done = 0
     for index, uz in enumerate(uz_files, start=1):
         filename = os.path.basename(uz)
         log(f"Processing {filename} (file {index} of {total})")
