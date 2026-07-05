@@ -152,8 +152,8 @@ def process_uz_files(base_dir, system64_dir):
     done = 0
     for index, uz in enumerate(uz_files, start=1):
         filename = os.path.basename(uz)
-        log(f"Processing {filename} (file {index} of {total})")  
-            
+        log(f"Processing {filename} (file {index} of {total})")
+      
         # Build and run the decompress command using ucc-bin-amd64 from system64_dir.
         cmd = f'"{ucc_path}" decompress "{uz}"'
         if run_cmd(cmd) != 0:
